@@ -179,13 +179,83 @@ stdsc = StandardScaler()
 X_train_std = stdsc.fit_transform(X_train)
 X_test_std = stdsc.transform(X_test) 
 
+"""
+L1 vs L2 regularization: So far we have seen the usage of L2 regularization in
+the joint minimization of cost function and weight magnitude penalty. This works
+well to regularize the data and prevent overfitting by minimzing the weight
+magnitude. Another option is the L1 regularization, which leads to sparse 
+weight vectors, i.e. most entries are 0. This can be extremely useful for 
+feature selection. Next up, is some code for Raschka that shows these points.
 
+"""
+from sklearn.linear_model import LogisticRegression
 
+# logistic regression using L1 regularization
+lr = LogisticRegression(penalty='l1', C=0.1)
+lr.fit(X_train_std, y_train)
+print('Training accuracy: ', lr.score(X_train_std, y_train))
+print('Test accuracy: ', lr.score(X_test_std, y_test))
 
+# Since the test and training scores are close, there is no indication of 
+# overfitting. Find the weight coefficients. Remember One-versus-Rest is used.
+print(lr.coef_)
 
+"""
+Plotting the weight components for each feature as a function of regularizat-
+ion strength. When a weight vector is 0, it tells us that the feature is not
+important. There is a caveat, however. If two features are correlated, and 
+yet important, one of the weights could end up being zero. So, need to watch
+out for that.
 
+"""
+import matplotlib.pyplot as plt
 
+# create a figure object
+fig = plt.figure()
 
+# create an axis object in the figure: Fig 1 in a 1 by 1 grid
+ax = plt.subplot(111) 
+
+# colors corresponding to each feature
+colors = ['blue', 'green', 'red', 'cyan', 'magenta', 'yellow', 'black',
+          'pink', 'lightgreen', 'lightblue', 'gray', 'indigo', 'orange']
+
+# initialize array to capture weight coefficients for varying C
+weights, params = [], []
+
+# consider C = 10**-4 to 10**5. c = -4..5
+for c in np.arange(-4, 6):
+    lr = LogisticRegression(penalty='l1', 
+                            C=10**c, 
+                            random_state=0)
+    lr.fit(X_train_std, y_train)
+    
+    # interested in weights corresponding to wine 1 vs wines 2 and 3
+    weights.append(lr.coef_[0])                            
+    params.append(10**c)
+
+# turn weight and parameter arrays into numpy arrays
+weights = np.array(weights)
+params = np.array(params)    
+
+print(weights.shape[1])
+    
+for column, color in zip(range(weights.shape[1]), colors):
+    plt.plot(params, weights[:, column],
+             label=df_wine.columns[column+1],
+             color=color)
+             
+plt.ylabel('Weight coefficients')
+plt.xlabel('C')
+plt.title('Wine 1 vs rest')
+plt.legend(loc='upper left')             
+plt.axhline(0, color='black', linestyle='--', linewidth=3)
+ax.legend(loc='upper center',
+          bbox_to_anchor=(1.38, 1.03),
+          ncol=1, fancybox=True)
+plt.xscale('log')
+plt.savefig('L1RegularizationWine1.png')
+plt.clf()             
 
 
 
