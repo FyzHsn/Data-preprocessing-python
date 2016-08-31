@@ -231,7 +231,7 @@ for c in np.arange(-4, 6):
     lr.fit(X_train_std, y_train)
     
     # interested in weights corresponding to wine 1 vs wines 2 and 3
-    weights.append(lr.coef_[0])                            
+    weights.append(lr.coef_[2])                            
     params.append(10**c)
 
 # turn weight and parameter arrays into numpy arrays
@@ -247,16 +247,17 @@ for column, color in zip(range(weights.shape[1]), colors):
              
 plt.ylabel('Weight coefficients')
 plt.xlabel('C')
-plt.title('Wine 1 vs rest')
+plt.title('Wine 3 vs rest')
 plt.legend(loc='upper left')             
 plt.axhline(0, color='black', linestyle='--', linewidth=3)
 ax.legend(loc='upper center',
           bbox_to_anchor=(1.38, 1.03),
           ncol=1, fancybox=True)
 plt.xscale('log')
-plt.savefig('L1RegularizationWine1.png')
-plt.clf()             
-
+plt.xlim(10**(-5), 10**5)
+#plt.savefig('L1RegularizationWine3.png', bbox_inches='tight')
+#plt.close()             
+plt.show()
 
 
 
