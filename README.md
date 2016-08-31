@@ -17,5 +17,9 @@ Splitting dataset into test and train subsets
 How to choose features of interest from the dataset?
 ----------------------------------------------------
 
+![](https://github.com/FyzHsn/Data-preprocessing-python/blob/master/L1RegularizationWine1.png?raw=true)  
+![](https://github.com/FyzHsn/Data-preprocessing-python/blob/master/L1RegularizationWine2.png?raw=true)  
+![](https://github.com/FyzHsn/Data-preprocessing-python/blob/master/L1RegularizationWine3.png?raw=true)  
+
 
 
