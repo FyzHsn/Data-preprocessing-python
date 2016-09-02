@@ -307,7 +307,7 @@ print('Test set accuracy: ', knn.score(X_test_std[:, k5], y_test))
 from sklearn.ensemble import RandomForestClassifier
 feat_labels = df_wine.columns[1:]
 print(feat_labels)
-forest = RandomForestClassifier(n_estimators=10000,
+forest = RandomForestClassifier(n_estimators=1000,
                                 random_state=0,
                                 n_jobs=-1)
 forest.fit(X_train, y_train)
@@ -319,7 +319,19 @@ indices = np.argsort(importances)[::-1]
 for f in range(X_train.shape[1]):
     print("%2d) %-*s %f" % (f + 1, 30,
                             feat_labels[indices[f]],
-                            importances[indices[f]])
+                            importances[indices[f]]))
+                            
+# plot of relative importance of features
+plt.title('Feature Importance')
+plt.bar(range(X_train.shape[1]),
+              importances[indices],
+              color='lightblue',
+              align='center') 
+plt.xticks(range(X_train.shape[1]),
+                 feat_labels[indices], rotation=90)       
+plt.xlim([-1, X_train.shape[1]])
+plt.tight_layout()                 
+plt.show()                           
 
         
                      
