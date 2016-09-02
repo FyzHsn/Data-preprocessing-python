@@ -258,6 +258,71 @@ plt.xlim(10**(-5), 10**5)
 #plt.savefig('L1RegularizationWine3.png', bbox_inches='tight')
 #plt.close()             
 plt.show()
+ 
+# Test the sequential backwards algorithm - Raschka uses the knn algorithm.
+from SBS import SBS
+
+# import KNeighborsClassifier from the sklearn.neighbors module
+from sklearn.neighbors import KNeighborsClassifier
+
+# knn estimator
+knn = KNeighborsClassifier(n_neighbors=2)
+sbs = SBS(knn, k_features=1)
+sbs.fit(X_train_std, y_train)
+
+# Plot the scores as a function of feature dimension
+# Look at the evolution of subsets
+print('Indices: ', sbs.subsets_)
+print('Scores: ', sbs.scores_)
+
+k_feat = [len(k) for k in sbs.subsets_]
+plt.plot(k_feat, sbs.scores_)
+plt.xlabel('Number of features')
+plt.ylabel('Accuracy')
+plt.ylim(0.8, 1.1)
+
+# when dealing with integers on the x axis, grids really create a visual impact
+plt.grid()
+plt.title('Sequential Backwards Selection - Using knn on \n wine dataset')
+plt.show()
+
+# We can see that there are 5 features, the smallest amount for which the 
+# accuracy is 100%. What are these features?
+k5 = list(sbs.subsets_[8])
+print(df_wine.columns[1:][k5])
+
+# Let us next check how the KNN classifier performs before and after dimension
+# reduction. 
+knn.fit(X_train_std, y_train)
+print('Training accuracy: ', knn.score(X_train_std, y_train))
+print('Test set accuracy: ', knn.score(X_test_std, y_test))
+
+# After dimensional reduction
+knn.fit(X_train_std[:, k5], y_train)
+print('Training accuracy: ', knn.score(X_train_std[:, k5], y_train))
+print('Test set accuracy: ', knn.score(X_test_std[:, k5], y_test))
+
+# Assessing feature importance via random forests. There is built in function
+# for the RandomForestClassifier of the sklearn.ensemble module.
+from sklearn.ensemble import RandomForestClassifier
+feat_labels = df_wine.columns[1:]
+print(feat_labels)
+forest = RandomForestClassifier(n_estimators=10000,
+                                random_state=0,
+                                n_jobs=-1)
+forest.fit(X_train, y_train)
+importances = forest.feature_importances_
+indices = np.argsort(importances)[::-1]
+
+# note the [::-1] command - in this case it simply flips the order. But it can
+# do other things as well. Find out what.
+for f in range(X_train.shape[1]):
+    print("%2d) %-*s %f" % (f + 1, 30,
+                            feat_labels[indices[f]],
+                            importances[indices[f]])
+
+        
+                     
 
 
 
