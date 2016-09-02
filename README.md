@@ -32,5 +32,6 @@ L1 regularization can be used to yield sparse weight vectors in Logistic Regress
 ![](https://github.com/FyzHsn/Data-preprocessing-python/blob/master/L1RegularizationWine2.png?raw=true)  
 ![](https://github.com/FyzHsn/Data-preprocessing-python/blob/master/L1RegularizationWine3.png?raw=true)  
 
+**Feature selection** can be carried out using the Sequential Backwards Selection (SBS) algorithm. This is particulaly useful for models that do not allow regularization. On the other hand, **feature importance** can be carried out using the RandomForestClassifier algorithm. They are all included in the scripts. I have used the scripts by Raschka for practise. He himself has his book on his github account. 
 
 
