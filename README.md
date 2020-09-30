@@ -7,6 +7,7 @@ How to handle missing data?
 ---------------------------
 
 We can either eliminate the rows and columns with missing data, if there are a very high percentage of missing data. Alternatively, we can impute the values of missing slots using a mean, median, or most frequent value strategy. One needs to import the Imputer class from the sklearn.preprocessing module.  
+We can also use Python libraries such as Numpy and Pandas to handle missing values.
 
 Class labeling
 --------------
